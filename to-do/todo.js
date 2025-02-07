@@ -9,9 +9,15 @@ document.addEventListener("DOMContentLoaded", function() {
         const tasks = [];
         const listItems = taskList.querySelectorAll("li");
         listItems.forEach(function(item) {
+            // Находим выпадающий список внутри элемента списка
+            const select = item.querySelector("select");
+            // Получаем выбранное значение (приоритет)
+            const priority = select.value;
+
             tasks.push({
                 text: item.querySelector("span").textContent,
-                completed: item.classList.contains("completed")
+                completed: item.classList.contains("completed"),
+                priority: priority // Сохраняем приоритет
             });
         });
         localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -23,6 +29,35 @@ document.addEventListener("DOMContentLoaded", function() {
         if (tasks) {
             tasks.forEach(function(task) {
                 const listItem = document.createElement("li");
+
+                // Создаем выпадающий список
+                const select = document.createElement("select");
+                select.classList.add("priority"); // Добавляем класс для стилизации
+
+                const optionHigh = document.createElement("option");
+                optionHigh.value = "high";
+                optionHigh.textContent = "Высокий";
+                select.appendChild(optionHigh);
+
+                const optionMedium = document.createElement("option");
+                optionMedium.value = "medium";
+                optionMedium.textContent = "Средний";
+                select.appendChild(optionMedium);
+
+                const optionLow = document.createElement("option");
+                optionLow.value = "low";
+                optionLow.textContent = "Низкий";
+                select.appendChild(optionLow);
+
+                // Устанавливаем выбранный приоритет
+                select.value = task.priority;
+
+                // Добавляем обработчик события change на выпадающий список
+                select.addEventListener("change", function() {
+                    saveTasks(); // Сохраняем изменения в LocalStorage
+                });
+
+                listItem.appendChild(select);
 
                 // Создаем чекбокс
                 const checkbox = document.createElement("input");
@@ -77,6 +112,32 @@ document.addEventListener("DOMContentLoaded", function() {
         if (taskText !== "") {
             // 4. Создаем новый элемент списка (li)
             const listItem = document.createElement("li");
+
+            // Создаем выпадающий список
+            const select = document.createElement("select");
+            select.classList.add("priority"); // Добавляем класс для стилизации
+
+            const optionHigh = document.createElement("option");
+            optionHigh.value = "high";
+            optionHigh.textContent = "Высокий";
+            select.appendChild(optionHigh);
+
+            const optionMedium = document.createElement("option");
+            optionMedium.value = "medium";
+            optionMedium.textContent = "Средний";
+            select.appendChild(optionMedium);
+
+            const optionLow = document.createElement("option");
+            optionLow.value = "low";
+            optionLow.textContent = "Низкий";
+            select.appendChild(optionLow);
+
+            // Добавляем обработчик события change на выпадающий список
+            select.addEventListener("change", function() {
+                saveTasks(); // Сохраняем изменения в LocalStorage
+            });
+
+            listItem.appendChild(select);
 
             // Создаем чекбокс
             const checkbox = document.createElement("input");
