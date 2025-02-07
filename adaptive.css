@@ -1,0 +1,42 @@
+body {
+    background-color: #4c4c4c;
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    line-height: 1.6;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Разрешаем перенос элементов */
+    gap: 20px; /* Расстояние между элементами */
+}
+
+.item {
+    background-color: #ea2323;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+    flex: 1 1 200px; /* Задаем размер и гибкость элемента */
+    min-width: 150px; /* Минимальный размер элемента*/
+
+}
+/* Стили для мобильных устройств (ширина до 767px) */
+@media (max-width: 767px) {
+    .item {
+        flex-basis: 100%; /* Занимают всю ширину контейнера для мобильных */
+    }
+}
+
+/* Стили для планшетов (ширина от 768px до 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .item {
+        flex-basis: calc(50% - 10px);  /* Занимают половину ширины для планшетов */
+    }
+}
+
+/* Стили для компьютеров (ширина от 992px) */
+@media (min-width: 992px) {
+    .item {
+        flex-basis: calc(25% - 10px);  /* Занимают четверть ширины для компьютеров */
+    }
+}

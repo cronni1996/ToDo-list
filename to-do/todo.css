@@ -1,0 +1,151 @@
+/* Общие стили (для обеих тем) */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход */
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s; /* Плавный переход */
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    transition: color 0.3s; /* Плавный переход */
+}
+
+.input-group {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.input-group input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s; /* Плавный переход */
+}
+
+.input-group button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход */
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    transition: border-color 0.3s, color 0.3s; /* Плавный переход */
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+li input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+li button {
+    margin-left: auto;
+    background-color: #d9534f;
+}
+
+li.completed span {
+    text-decoration: line-through;
+    color: #777;
+}
+
+
+/* Стили для светлой темы (по умолчанию) */
+body {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+}
+
+.input-group input[type="text"] {
+    border-color: #ddd;
+    background-color: #fff;
+    color: #333;
+}
+
+.input-group button {
+    background-color: #5cb85c;
+    color: #fff;
+}
+
+li {
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+/* Стили для темной темы */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #333;
+        color: #eee;
+    }
+
+    .container {
+        background-color: #444;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    h1 {
+        color: #eee;
+    }
+
+    .input-group input[type="text"] {
+        border-color: #666;
+        background-color: #555;
+        color: #eee;
+    }
+
+    .input-group button {
+        background-color: #333;
+        color: #fff;
+    }
+
+    li {
+        border-bottom: 1px solid #666;
+        color: #eee;
+    }
+}
+
+/* Стили для кнопки "Удалить" */
+li button {
+    margin-left: auto;
+    background-color: #d9534f;
+}
+
+/* Стили для зачеркнутого текста */
+li.completed span {
+    text-decoration: line-through;
+    color: #777;
+}

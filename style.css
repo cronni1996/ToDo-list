@@ -1,0 +1,149 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Стиль для навигации по умолчанию */
+    justify-content: center;
+}
+
+nav li {
+    margin: 0 10px; /* Общий стиль для элементов меню */
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+}
+
+article {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    padding: 20px;
+    border: 2px solid black;
+    background-color: bisque;
+    margin: 10px;
+}
+
+aside {
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+h1, h2, h3 {
+    color: darkblue;
+}
+
+p {
+    font-family: Arial, serif;
+}
+
+a {
+    color: darkgreen;
+    text-decoration: none;
+}
+
+.important {
+    background-color: aliceblue;
+    font-style: italic;
+}
+
+/* flexbox */
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+}
+
+main ol {
+    grid-column: 1/2;
+}
+
+main ul {
+    grid-column: 2/3;
+}
+
+main article {
+    flex-grow: 2;
+}
+
+
+/* Стили для мобильных устройств (ширина до 767px) */
+@media (max-width: 767px) {
+    body {
+        font-size: 11px;
+    }
+
+    nav ul {
+        display: block; /* меню для мобильных экранов */
+    }
+
+    nav li {
+        margin-bottom: 5px; /* Общий стиль для меню вынесен за медиазапрос*/
+        text-align: center; /* меню для мобильных экранов */
+    }
+
+    main {
+        display: block;
+    }
+    article {
+        text-align: left;
+    }
+    aside {
+        text-align: left;
+    }
+}
+
+/* Стили для планшетов (ширина от 768px до 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    body {
+        font-size: 12px;
+    }
+    nav ul {
+        display: block; /* меню для средних экранов */
+    }
+
+    nav li {
+        margin-bottom: 5px; /* Общий стиль для меню вынесен за медиазапрос*/
+        text-align: center; /* меню для средних экранов */
+    }
+}
+
+/* Стили для компьютеров (ширина от 992px) */
+@media (min-width: 992px) {
+    body {
+        font-size: 14px;
+    }
+    nav ul {
+        display: flex; /*Меню для больших экранов*/
+    }
+}
