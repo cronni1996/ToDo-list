@@ -52,32 +52,27 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Устанавливаем выбранный приоритет
                 select.value = task.priority;
 
-                // Добавляем обработчик события change на выпадающий список
-                select.addEventListener("change", function() {
-                    saveTasks(); // Сохраняем изменения в LocalStorage
-                });
-
                 listItem.appendChild(select);
 
                 // Создаем чекбокс
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
                 checkbox.checked = task.completed;
-                checkbox.addEventListener("change", function() {
-                    if (checkbox.checked) {
-                        listItem.classList.add("completed");
-                    } else {
-                        listItem.classList.remove("completed");
-                    }
-                    saveTasks(); // Сохраняем изменения в LocalStorage
-                });
 
                 // Создаем кнопку "Удалить"
                 const deleteBtn = document.createElement("button");
                 deleteBtn.textContent = "Удалить";
-                deleteBtn.addEventListener("click", function() {
-                    taskList.removeChild(listItem);
-                    saveTasks(); // Сохраняем изменения в LocalStorage
+
+                // Создаем ссылку "Подробнее"
+                const detailsLink = document.createElement("a");
+                detailsLink.href = "#"; // Пустая ссылка, чтобы не было перехода
+                detailsLink.textContent = "Подробнее";
+
+                // Добавляем обработчик события click на ссылку
+                detailsLink.addEventListener("click", function(event) {
+                    event.preventDefault(); // Отменяем переход по ссылке
+                    event.stopPropagation(); // Останавливаем всплытие события
+                    alert("Текст задачи: " + task.text); // Отображаем текст задачи во всплывающем окне
                 });
 
                 // Создаем span для текста задачи
@@ -87,12 +82,24 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Добавляем чекбокс и текст задачи в элемент списка
                 listItem.appendChild(checkbox);
                 listItem.appendChild(taskTextSpan);
+                listItem.appendChild(detailsLink); // Добавляем ссылку в элемент списка
                 listItem.appendChild(deleteBtn);
 
                 // Если задача выполнена, добавляем класс "completed"
                 if (task.completed) {
                     listItem.classList.add("completed");
                 }
+                
+
+                // Добавляем обработчики событий для подсветки
+                listItem.addEventListener("mouseover", function() {
+                    listItem.style.backgroundColor = "#5e4646"; // Изменяем цвет фона при наведении
+                });
+
+                listItem.addEventListener("mouseout", function() {
+                    listItem.style.backgroundColor = ""; // Возвращаем исходный цвет фона
+                });
+
 
                 // Добавляем новый элемент в список
                 taskList.appendChild(listItem);
@@ -102,6 +109,39 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Загружаем задачи из LocalStorage при загрузке страницы
     loadTasks();
+
+
+    // Делегирование событий
+    taskList.addEventListener("click", function(event) {
+        console.log("Сработал обработчик на UL!");
+        // Если кликнули на чекбокс
+        if (event.target.type === "checkbox") {
+            // Получаем элемент списка, в котором находится чекбокс
+            let listItem = event.target.parentNode;
+
+            // Отмечаем задачу как выполненную/невыполненную
+            if (event.target.checked) {
+                listItem.classList.add("completed");
+            } else {
+                listItem.classList.remove("completed");
+            }
+
+            // Сохраняем изменения в LocalStorage
+            saveTasks();
+        }
+
+        // Если кликнули на кнопку "Удалить"
+        if (event.target.tagName === "BUTTON" && event.target.textContent === "Удалить") {
+            // Получаем элемент списка, в котором находится кнопка
+            let listItem = event.target.parentNode;
+
+            // Удаляем задачу из списка
+            taskList.removeChild(listItem);
+
+            // Сохраняем изменения в LocalStorage
+            saveTasks();
+        }
+    });
 
     // 2. Добавляем обработчик события на кнопку
     addTaskBtn.addEventListener("click", function() {
@@ -132,31 +172,26 @@ document.addEventListener("DOMContentLoaded", function() {
             optionLow.textContent = "Низкий";
             select.appendChild(optionLow);
 
-            // Добавляем обработчик события change на выпадающий список
-            select.addEventListener("change", function() {
-                saveTasks(); // Сохраняем изменения в LocalStorage
-            });
-
             listItem.appendChild(select);
 
             // Создаем чекбокс
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
-            checkbox.addEventListener("change", function() {
-                if (checkbox.checked) {
-                    listItem.classList.add("completed");
-                } else {
-                    listItem.classList.remove("completed");
-                }
-                saveTasks(); // Сохраняем изменения в LocalStorage
-            });
 
             // Создаем кнопку "Удалить"
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "Удалить";
-            deleteBtn.addEventListener("click", function() {
-                taskList.removeChild(listItem);
-                saveTasks(); // Сохраняем изменения в LocalStorage
+
+            // Создаем ссылку "Подробнее"
+            const detailsLink = document.createElement("a");
+            detailsLink.href = "#"; // Пустая ссылка, чтобы не было перехода
+            detailsLink.textContent = "Подробнее";
+
+            // Добавляем обработчик события click на ссылку
+            detailsLink.addEventListener("click", function(event) {
+                event.preventDefault(); // Отменяем переход по ссылке
+                event.stopPropagation(); // Останавливаем всплытие события
+                alert("Текст задачи: " + taskText); // Отображаем текст задачи во всплывающем окне
             });
 
             // Создаем span для текста задачи
@@ -166,9 +201,19 @@ document.addEventListener("DOMContentLoaded", function() {
             // Добавляем чекбокс и текст задачи в элемент списка
             listItem.appendChild(checkbox);
             listItem.appendChild(taskTextSpan);
+            listItem.appendChild(detailsLink); // Добавляем ссылку в элемент списка
             listItem.appendChild(deleteBtn);
 
-            // 5. Добавляем новый элемент в список
+            // Добавляем обработчики событий для подсветки
+            listItem.addEventListener("mouseover", function() {
+                listItem.style.backgroundColor = "#5e4646"; // Изменяем цвет фона при наведении
+            });
+
+            listItem.addEventListener("mouseout", function() {
+                listItem.style.backgroundColor = ""; // Возвращаем исходный цвет фона
+            });
+
+            // Добавляем новый элемент в список
             taskList.appendChild(listItem);
 
             // Очищаем текстовое поле

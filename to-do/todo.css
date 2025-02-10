@@ -52,7 +52,7 @@ li {
     border-bottom: 1px solid #eee;
     display: flex;
     align-items: center;
-    transition: border-color 0.3s, color 0.3s; /* Плавный переход */
+    transition: border-color 0.3s, color 0.3s,  background-color 0.3s; /* Плавный переход */
 }
 
 li:last-child {
@@ -71,6 +71,20 @@ li button {
 li.completed span {
     text-decoration: line-through;
     color: #777;
+}
+li a {
+    margin-left: 10px; /* Добавляем отступ слева */
+    text-decoration: none; /* Убираем подчеркивание */
+    color: #337ab7; /* Цвет текста */
+    font-size: 0.8em; /* Уменьшаем размер шрифта */
+    border: 1px solid #337ab7; /* Добавляем рамку */
+    padding: 2px 5px; /* Добавляем отступы */
+    border-radius: 3px; /* Скругляем углы */
+}
+
+li a:hover {
+    background-color: #337ab7; /* Изменяем цвет фона при наведении */
+    color: #fff; /* Изменяем цвет текста при наведении */
 }
 
 
@@ -105,6 +119,10 @@ li {
     color: #333;
 }
 
+li:hover {
+    background-color: #ddd; /* Изменяем цвет фона при наведении */
+}
+
 /* Стили для темной темы */
 @media (prefers-color-scheme: dark) {
     body {
@@ -135,6 +153,10 @@ li {
     li {
         border-bottom: 1px solid #666;
         color: #eee;
+    }
+
+    li:hover {
+        background-color: #5e4646; /* Изменяем цвет фона при наведении */
     }
 }
 
