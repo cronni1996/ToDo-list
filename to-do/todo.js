@@ -6,106 +6,116 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Функция для сохранения задач в LocalStorage
     function saveTasks() {
-        const tasks = [];
+        let tasks = [];
+
         const listItems = taskList.querySelectorAll("li");
+
         listItems.forEach(function(item) {
-            // Находим выпадающий список внутри элемента списка
             const select = item.querySelector("select");
-            // Получаем выбранное значение (приоритет)
             const priority = select.value;
+
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            const completed = checkbox.checked;
 
             tasks.push({
                 text: item.querySelector("span").textContent,
-                completed: item.classList.contains("completed"),
-                priority: priority // Сохраняем приоритет
+                completed: completed,
+                priority: priority
             });
         });
+
         localStorage.setItem("tasks", JSON.stringify(tasks));
     }
 
     // Функция для отображения задач из LocalStorage
     function loadTasks() {
+        taskList.innerHTML = "";
         const tasks = JSON.parse(localStorage.getItem("tasks"));
+
         if (tasks) {
             tasks.forEach(function(task) {
-                const listItem = document.createElement("li");
-
-                // Создаем выпадающий список
-                const select = document.createElement("select");
-                select.classList.add("priority"); // Добавляем класс для стилизации
-
-                const optionHigh = document.createElement("option");
-                optionHigh.value = "high";
-                optionHigh.textContent = "Высокий";
-                select.appendChild(optionHigh);
-
-                const optionMedium = document.createElement("option");
-                optionMedium.value = "medium";
-                optionMedium.textContent = "Средний";
-                select.appendChild(optionMedium);
-
-                const optionLow = document.createElement("option");
-                optionLow.value = "low";
-                optionLow.textContent = "Низкий";
-                select.appendChild(optionLow);
-
-                // Устанавливаем выбранный приоритет
-                select.value = task.priority;
-
-                listItem.appendChild(select);
-
-                // Создаем чекбокс
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.checked = task.completed;
-
-                // Создаем кнопку "Удалить"
-                const deleteBtn = document.createElement("button");
-                deleteBtn.textContent = "Удалить";
-
-                // Создаем ссылку "Подробнее"
-                const detailsLink = document.createElement("a");
-                detailsLink.href = "#"; // Пустая ссылка, чтобы не было перехода
-                detailsLink.textContent = "Подробнее";
-
-                // Добавляем обработчик события click на ссылку
-                detailsLink.addEventListener("click", function(event) {
-                    event.preventDefault(); // Отменяем переход по ссылке
-                    event.stopPropagation(); // Останавливаем всплытие события
-                    alert("Текст задачи: " + task.text); // Отображаем текст задачи во всплывающем окне
-                });
-
-                // Создаем span для текста задачи
-                const taskTextSpan = document.createElement("span");
-                taskTextSpan.textContent = task.text;
-
-                // Добавляем чекбокс и текст задачи в элемент списка
-                listItem.appendChild(checkbox);
-                listItem.appendChild(taskTextSpan);
-                listItem.appendChild(detailsLink); // Добавляем ссылку в элемент списка
-                listItem.appendChild(deleteBtn);
-
-                // Если задача выполнена, добавляем класс "completed"
-                if (task.completed) {
-                    listItem.classList.add("completed");
-                }
-                
-
-                // Добавляем обработчики событий для подсветки
-                listItem.addEventListener("mouseover", function() {
-                    listItem.style.backgroundColor = "#5e4646"; // Изменяем цвет фона при наведении
-                });
-
-                listItem.addEventListener("mouseout", function() {
-                    listItem.style.backgroundColor = ""; // Возвращаем исходный цвет фона
-                });
-
-
-                // Добавляем новый элемент в список
+                const listItem = createTaskElement(task.text, task.completed, task.priority);
                 taskList.appendChild(listItem);
             });
         }
     }
+
+    function createTaskElement(text, completed, priority) {
+        const listItem = document.createElement("li");
+
+        // Создаем выпадающий список
+        const select = document.createElement("select");
+        select.classList.add("priority"); // Добавляем класс для стилизации
+
+        const optionHigh = document.createElement("option");
+        optionHigh.value = "high";
+        optionHigh.textContent = "Высокий";
+        select.appendChild(optionHigh);
+
+        const optionMedium = document.createElement("option");
+        optionMedium.value = "medium";
+        optionMedium.textContent = "Средний";
+        select.appendChild(optionMedium);
+
+        const optionLow = document.createElement("option");
+        optionLow.value = "low";
+        optionLow.textContent = "Низкий";
+
+        select.value = priority;
+        select.addEventListener("change", saveTasks);
+
+        // Создаем чекбокс
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = completed;
+        checkbox.addEventListener("change", saveTasks);
+
+        // Создаем кнопку "Удалить"
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Удалить";
+        deleteBtn.addEventListener("click", function() {
+            taskList.removeChild(listItem);
+            saveTasks();
+        });
+
+        // Создаем ссылку "Подробнее"
+        const detailsLink = document.createElement("a");
+        detailsLink.href = "#";
+        detailsLink.textContent = "Подробнее";
+        detailsLink.addEventListener("click", function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            alert("Текст задачи: " + text);
+        });
+
+        // Создаем span для текста задачи
+        const taskTextSpan = document.createElement("span");
+        taskTextSpan.textContent = text;
+
+        // Собираем все элементы в задачу
+        listItem.appendChild(checkbox);
+        listItem.appendChild(taskTextSpan);
+        listItem.appendChild(detailsLink);
+        listItem.appendChild(deleteBtn);
+        listItem.appendChild(select);
+
+        // Обработчики событий для подсветки
+        listItem.addEventListener("mouseover", function() {
+            listItem.style.backgroundColor = "#5e4646";
+        });
+
+        listItem.addEventListener("mouseout", function() {
+            listItem.style.backgroundColor = "";
+        });
+
+
+        if (completed) {
+            listItem.classList.add("completed");
+        }
+
+        return listItem
+    }
+
 
     // Загружаем задачи из LocalStorage при загрузке страницы
     loadTasks();
@@ -113,7 +123,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Делегирование событий
     taskList.addEventListener("click", function(event) {
-        console.log("Сработал обработчик на UL!");
         // Если кликнули на чекбокс
         if (event.target.type === "checkbox") {
             // Получаем элемент списка, в котором находится чекбокс
@@ -150,76 +159,40 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Проверяем, что текст не пустой
         if (taskText !== "") {
-            // 4. Создаем новый элемент списка (li)
-            const listItem = document.createElement("li");
+            // Отображаем сообщение о загрузке
+            taskList.textContent = "Добавление задачи...";
 
-            // Создаем выпадающий список
-            const select = document.createElement("select");
-            select.classList.add("priority"); // Добавляем класс для стилизации
+            // Имитируем задержку ответа от сервера
+            setTimeout(function() {
+                // Убираем сообщение о загрузке
+                taskList.textContent = "";
 
-            const optionHigh = document.createElement("option");
-            optionHigh.value = "high";
-            optionHigh.textContent = "Высокий";
-            select.appendChild(optionHigh);
+                // 1. Получаем текущий список задач из LocalStorage
+                let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-            const optionMedium = document.createElement("option");
-            optionMedium.value = "medium";
-            optionMedium.textContent = "Средний";
-            select.appendChild(optionMedium);
+                // 2. Создаем объект с данными о новой задаче
+                const newTask = {
+                    text: taskText,
+                    completed: false,
+                    priority: "medium" // Или любое другое значение по умолчанию
+                };
 
-            const optionLow = document.createElement("option");
-            optionLow.value = "low";
-            optionLow.textContent = "Низкий";
-            select.appendChild(optionLow);
+                // 3. Добавляем новую задачу в список задач
+                tasks.push(newTask);
 
-            listItem.appendChild(select);
+                // 4. Сохраняем обновленный список задач в LocalStorage
+                localStorage.setItem("tasks", JSON.stringify(tasks));
 
-            // Создаем чекбокс
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
+                // 5. Создаем элемент списка для новой задачи и добавляем его на страницу
+                //  const listItem = createTaskElement(taskText, false, "medium");
+                // taskList.appendChild(listItem);
 
-            // Создаем кнопку "Удалить"
-            const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "Удалить";
+                // 6. Вызываем loadTasks(), чтобы обновить список задач
+                loadTasks();
 
-            // Создаем ссылку "Подробнее"
-            const detailsLink = document.createElement("a");
-            detailsLink.href = "#"; // Пустая ссылка, чтобы не было перехода
-            detailsLink.textContent = "Подробнее";
-
-            // Добавляем обработчик события click на ссылку
-            detailsLink.addEventListener("click", function(event) {
-                event.preventDefault(); // Отменяем переход по ссылке
-                event.stopPropagation(); // Останавливаем всплытие события
-                alert("Текст задачи: " + taskText); // Отображаем текст задачи во всплывающем окне
-            });
-
-            // Создаем span для текста задачи
-            const taskTextSpan = document.createElement("span");
-            taskTextSpan.textContent = taskText;
-
-            // Добавляем чекбокс и текст задачи в элемент списка
-            listItem.appendChild(checkbox);
-            listItem.appendChild(taskTextSpan);
-            listItem.appendChild(detailsLink); // Добавляем ссылку в элемент списка
-            listItem.appendChild(deleteBtn);
-
-            // Добавляем обработчики событий для подсветки
-            listItem.addEventListener("mouseover", function() {
-                listItem.style.backgroundColor = "#5e4646"; // Изменяем цвет фона при наведении
-            });
-
-            listItem.addEventListener("mouseout", function() {
-                listItem.style.backgroundColor = ""; // Возвращаем исходный цвет фона
-            });
-
-            // Добавляем новый элемент в список
-            taskList.appendChild(listItem);
-
-            // Очищаем текстовое поле
-            taskInput.value = "";
-
-            saveTasks(); // Сохраняем изменения в LocalStorage
+                // Очищаем текстовое поле
+                taskInput.value = "";
+            }, 200); // 2000 миллисекунд = 2 секунды
         }
     });
 });
