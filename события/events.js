@@ -40,3 +40,19 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log("Элемент, с которого убрана мышь: " + event.target);
     });
 });
+
+
+const p = new Promise(function (resolve, reject) {
+    setTimeout(() => {
+        console.log = ('Preparing data...')
+        const ggg =
+            {
+                day: 'dddd',
+                tea: 'green'
+            }
+        resolve(ggg)
+    }, 2000)
+})
+p.then((data)=>{
+    console.log(data);
+})

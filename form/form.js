@@ -77,3 +77,54 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+
+const p = new Promise(function(resolve, reject) {
+    setTimeout(() => {
+        const randomNumber = Math.random();
+        if (randomNumber > 0.5) {
+            const backendData = {
+                day: 'dddd',
+                tea: 'green',
+                server: 2000
+            };
+            resolve(backendData);
+        } else {
+            reject("Ошибка: не удалось получить данные с сервера");
+        }
+    }, 2000);
+});
+
+p.then((data) => {
+    console.log("Data", data);
+})
+    .catch((error) => { // Добавили обработку ошибок
+        console.error("Произошла ошибка:", error);
+    })
+    .finally(() => { // Добавили код, который выполняется в любом случае
+        console.log("Выполнение промиса завершено");
+    });
+
+
+async function fetchDataAsync(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('HTTP error! status: ' + response.status);
+        }
+        const data = await response.json();
+        console.log("Данные получены:", data);
+        return data;
+    } catch (error) {
+        console.error("Ошибка:", error);
+        throw error; // Пробрасываем ошибку дальше
+    }
+}
+
+fetchDataAsync('https://jsonplaceholder.typicode.com/todos/1')
+    .then(function(result) {
+        console.log("Результат обработки:", result);
+    })
+    .catch(function(error) {
+        console.log("Финальная обработка ошибки:", error);
+    });
