@@ -4,8 +4,39 @@ document.addEventListener("DOMContentLoaded", function() {
     const addTaskBtn = document.getElementById("addTaskBtn");
     const taskList = document.getElementById("taskList");
 
-    // Функция для сохранения задач в LocalStorage
-    function saveTasks() {
+    // Имитация сохранения задач на сервере
+    async function saveTasksToServer(tasks) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+                const success = true; // Можно менять на false для тестов
+                if (success) {
+                    resolve(); // Успешно сохранено
+                } else {
+                    reject("Ошибка сохранения задач");
+                }
+
+            }, 500); // Имитация задержки 500мс
+        });
+    }
+
+    // Имитация загрузки задач с сервера
+    async function loadTasksFromServer() {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+                const success = true; // Можно менять на false для тестов
+                if (success) {
+                    resolve(tasks); // Успешно загружено
+                } else {
+                    reject("Ошибка загрузки задач");
+                }
+            }, 500); // Имитация задержки 500мс
+        });
+    }
+
+    // Функция для сохранения задач (теперь асинхронная)
+    async function saveTasks() {
         let tasks = [];
 
         const listItems = taskList.querySelectorAll("li");
@@ -24,19 +55,30 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
 
-        localStorage.setItem("tasks", JSON.stringify(tasks));
+        try {
+            await saveTasksToServer(tasks);
+            console.log("Задачи успешно сохранены на сервере");
+        } catch (error) {
+            console.error("Ошибка при сохранении задач:", error);
+            alert("Ошибка при сохранении задач!"); // Сообщаем пользователю об ошибке
+        }
     }
 
-    // Функция для отображения задач из LocalStorage
-    function loadTasks() {
+    // Функция для отображения задач из (теперь асинхронная)
+    async function loadTasks() {
         taskList.innerHTML = "";
-        const tasks = JSON.parse(localStorage.getItem("tasks"));
+        try {
+            const tasks = await loadTasksFromServer();
 
-        if (tasks) {
-            tasks.forEach(function(task) {
-                const listItem = createTaskElement(task.text, task.completed, task.priority);
-                taskList.appendChild(listItem);
-            });
+            if (tasks) {
+                tasks.forEach(function(task) {
+                    const listItem = createTaskElement(task.text, task.completed, task.priority);
+                    taskList.appendChild(listItem);
+                });
+            }
+        } catch (error) {
+            console.error("Ошибка при загрузке задач:", error);
+            alert("Ошибка при загрузке задач!"); // Сообщаем пользователю об ошибке
         }
     }
 
@@ -60,6 +102,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const optionLow = document.createElement("option");
         optionLow.value = "low";
         optionLow.textContent = "Низкий";
+        select.appendChild(optionLow);
 
         select.value = priority;
         select.addEventListener("change", saveTasks);
@@ -117,12 +160,12 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
 
-    // Загружаем задачи из LocalStorage при загрузке страницы
+    // Загружаем задачи  при загрузке страницы
     loadTasks();
 
 
     // Делегирование событий
-    taskList.addEventListener("click", function(event) {
+    taskList.addEventListener("click", async function(event) {
         // Если кликнули на чекбокс
         if (event.target.type === "checkbox") {
             // Получаем элемент списка, в котором находится чекбокс
@@ -135,8 +178,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 listItem.classList.remove("completed");
             }
 
-            // Сохраняем изменения в LocalStorage
-            saveTasks();
+            // Сохраняем изменения
+            await saveTasks();
         }
 
         // Если кликнули на кнопку "Удалить"
@@ -147,52 +190,48 @@ document.addEventListener("DOMContentLoaded", function() {
             // Удаляем задачу из списка
             taskList.removeChild(listItem);
 
-            // Сохраняем изменения в LocalStorage
-            saveTasks();
+            // Сохраняем изменения
+            await saveTasks();
         }
     });
 
     // 2. Добавляем обработчик события на кнопку
-    addTaskBtn.addEventListener("click", function() {
+    addTaskBtn.addEventListener("click", async function() {
         // 3. Получаем текст из текстового поля
         const taskText = taskInput.value.trim();
 
         // Проверяем, что текст не пустой
         if (taskText !== "") {
-            // Отображаем сообщение о загрузке
-            taskList.textContent = "Добавление задачи...";
+            // 1. Получаем текущий список задач
+            let tasks = await loadTasksFromServer() || [];
 
-            // Имитируем задержку ответа от сервера
-            setTimeout(function() {
-                // Убираем сообщение о загрузке
-                taskList.textContent = "";
+            // 2. Создаем объект с данными о новой задаче
+            const newTask = {
+                text: taskText,
+                completed: false,
+                priority: "medium" // Или любое другое значение по умолчанию
+            };
 
-                // 1. Получаем текущий список задач из LocalStorage
-                let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            // 3. Добавляем новую задачу в список задач
+            tasks.push(newTask);
 
-                // 2. Создаем объект с данными о новой задаче
-                const newTask = {
-                    text: taskText,
-                    completed: false,
-                    priority: "medium" // Или любое другое значение по умолчанию
-                };
-
-                // 3. Добавляем новую задачу в список задач
-                tasks.push(newTask);
-
-                // 4. Сохраняем обновленный список задач в LocalStorage
-                localStorage.setItem("tasks", JSON.stringify(tasks));
+            try {
+                // 4. Сохраняем обновленный список задач
+                await saveTasksToServer(tasks);
 
                 // 5. Создаем элемент списка для новой задачи и добавляем его на страницу
                 //  const listItem = createTaskElement(taskText, false, "medium");
                 // taskList.appendChild(listItem);
 
                 // 6. Вызываем loadTasks(), чтобы обновить список задач
-                loadTasks();
+                await loadTasks();
 
                 // Очищаем текстовое поле
                 taskInput.value = "";
-            }, 200); // 2000 миллисекунд = 2 секунды
+            } catch (error) {
+                console.error("Ошибка при добавлении задачи:", error);
+                alert("Ошибка при добавлении задачи!");
+            }
         }
     });
 });
