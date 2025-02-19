@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="todo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@400;500&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+<div class="container">
+    <h1>To-Do List</h1>
+    <div class="input-group">
+        <label for="taskInput">Новая задача:</label>
+        <input type="text" id="taskInput" placeholder="Добавьте новую задачу">
+        <button id="addTaskBtn"><i class="fas fa-plus"></i> Добавить</button>
+    </div>
+    <ul id="taskList">
+        <!-- Здесь будут отображаться задачи -->
+    </ul>
+    <div id="notification" class="notification"></div>
+    <footer>
+        <p>© 2025 Павел Малюков</p>
+    </footer>
+</div>
+<script src="todo.js"></script>
+</body>
+
+</html>

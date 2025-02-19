@@ -1,0 +1,253 @@
+/* todo.css */
+
+/* --- Переменные CSS --- */
+:root {
+    --main-bg-color: #f9f9f9;
+    --main-text-color: #212121;
+    --container-bg-color: #fff;
+    --border-color: #BDBDBD;
+    --primary-color: #264653;
+    --secondary-color: #2A9D8F;
+    --accent-color: #E9C46A;
+    --highlight-color: #F4A261;
+    --delete-button-bg-color: #E76F51;
+    --success-color: #4CAF50;
+    --error-color: #F44336;
+    --info-color: #2196F3;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    /* --- Шрифт и цвет заголовка --- */
+    --header-font-family: 'Oswald', sans-serif;
+    --header-color: var(--secondary-color);
+    --font-family: 'Roboto', sans-serif;
+}
+
+/* --- Общие стили --- */
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 12px;
+    background-color: var(--container-bg-color);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    /* --- Применяем новые стили для заголовка --- */
+    font-family: var(--header-font-family);
+    color: var(--header-color);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Стили для Input Group --- */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    margin-bottom: 8px;
+    text-align: left;
+    color: var(--main-text-color);
+    font-weight: 500;
+}
+
+.input-group input[type="text"] {
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-size: 16px;
+    color: var(--primary-color); /* Изменен цвет текста при вводе */
+}
+
+.input-group input[type="text"]:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 2px 6px rgba(42, 157, 143, 0.2);
+}
+
+.input-group button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: var(--button-text-color);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.input-group button:hover {
+    background-color: #213A44;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px var(--shadow-color);
+}
+
+/* --- Стили для списка задач --- */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+li input[type="checkbox"] {
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+li button {
+    margin-left: auto;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--delete-button-bg-color);
+    color: var(--button-text-color);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 14px;
+}
+
+li button:hover {
+    background-color: #C6463A;
+    transform: translateY(-1px);
+}
+
+li.completed span {
+    text-decoration: line-through;
+    color: #999;
+}
+
+li a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: var(--secondary-color);
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+li a:hover {
+    color: var(--primary-color);
+}
+
+/* --- Стили для приоритетов --- */
+.priority-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Прижимаем к правому краю */
+}
+
+.priority-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--button-text-color);
+    transition: transform 0.2s;
+}
+
+.priority-label:hover {
+    transform: scale(1.1);
+}
+
+.priority-label.high {
+    background-color: #F44336; /* Красный */
+}
+
+.priority-label.medium {
+    background-color: #FFC107; /* Желтый */
+}
+
+.priority-label.low {
+    background-color: #4CAF50; /* Зеленый */
+}
+
+.priority-label i {
+    /* Стили для иконок (Font Awesome) */
+    font-size: 12px;
+}
+/* --- Стили для уведомлений --- */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: var(--button-text-color);
+    display: none;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    font-size: 14px;
+}
+
+.notification.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification.success {
+    background-color: var(--success-color);
+}
+
+.notification.error {
+    background-color: var(--error-color);
+}
+
+.notification.info {
+    background-color: var(--info-color);
+}
+
+/* --- Стили для подвала --- */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #999;
+}
+
+/* --- Темная тема --- */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --main-bg-color: #222;
+        --main-text-color: #eee;
+        --container-bg-color: #333;
+        --border-color: #555;
+    }
+}
